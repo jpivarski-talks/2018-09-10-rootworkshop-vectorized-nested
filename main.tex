@@ -56,9 +56,21 @@
 
 % START START START START START START START START START START START START START
 
-\begin{frame}{First slide}
+\begin{frame}{Intersection of three topics}
 \vspace{0.5 cm}
-HERE
+\begin{block}{Hardware vectorization}
+Single Instruction, Multiple Data (SIMD); primary mode of parallelization on GPUs, only way to fully exploit CPUs that have wide vector registers (e.g.\ AVX-512).
+\end{block}
+
+\vspace{0.5 cm}
+\begin{block}{Array programming}
+High-level programming interface with the same structure as SIMD (Single {\bf VM} Instruction, Multiple Data), which may or may not be vectorized in hardware.
+\end{block}
+
+\vspace{0.5 cm}
+\begin{block}{Nested data structures}
+Particularly with variable-width contents; often hard to vectorize or even express with array programming.
+\end{block}
 \end{frame}
 
 \end{document}
