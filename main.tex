@@ -125,15 +125,30 @@ Expresses regular operations over \\ rectangular data structures in shorthand.
 
 \vspace{0.5 cm}
 \begin{itemize}\setlength{\itemsep}{0.15 cm}
-\item Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{rgb_pixels[0, 50:100, ::3]}}
-\item Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{all_pz = all_pt * sinh(all_eta)}}
-\item Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{all_phi - 2*pi}}
-\item Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger & (pt > 40)]}}
-\item Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{all_eta[argmax(all_pt)]}}
-\item Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][row]} (row of column array)}
+\item<2-> Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{rgb_pixels[0, 50:100, ::3]}}
+\item<3-> Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{all_pz = all_pt * sinh(all_eta)}}
+\item<4-> Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{all_phi - 2*pi}}
+\item<5-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger & (pt > 40)]}}
+\item<6-> Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{all_eta[argmax(all_pt)]}}
+\item<7-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][row]} (row of column array)}
 
 (AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[row]["column"]} (field of row tuple)}
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Extension to variable-sized, nested structures}
+\vspace{0.5 cm}
+Logical structure:
+
+Content:
+
+Offsets:
+
+Parents:
+
+
+
+
 \end{frame}
 
 
