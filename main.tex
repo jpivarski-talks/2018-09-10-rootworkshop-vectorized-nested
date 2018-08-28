@@ -333,14 +333,21 @@ nonempty_best = events["best"][(events["best"].counts > 0), 0]
 \textcolor{gray}{\small (TODO: replicate Jaydeep's results, write pure C code (no Numpy), and try to auto-vectorize the new algorithm in CPU.)}
 \end{frame}
 
-\begin{frame}{Relevance to ROOT}
+\begin{frame}{Relevance to ROOT (my conclusions slide)}
+\large
 \vspace{0.5 cm}
+\textcolor{darkblue}{\Large None of the preceeding needs to be in Python or Numpy.}
 
+\vspace{0.5 cm}
+\uncover<2->{It was motivated to bypass Python's slow for loops, but it helps physicists express analysis code more succinctly (interface) and it sets up their analysis code for hardware parallelization (performance).}
 
-
-
-
+\vspace{0.5 cm}
+\begin{itemize}
+\item<3-> The jagged array structure aligns perfectly with the RForest concept.
+\item<4-> An array programming model could be supported by the RTensor project.
+\item<5-> VecOps::RVec provides one-in-one-out vectorization; it could be extended to provide vectorized jagged operations as well.
+\item<6-> Doing so would provide a ``C++ story'' for how physicists can use BulkIO.
+\end{itemize}
 \end{frame}
-
 
 \end{document}
