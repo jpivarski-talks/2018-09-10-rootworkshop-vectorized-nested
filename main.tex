@@ -140,14 +140,17 @@ Expresses regular operations over \\ rectangular data structures in shorthand.
 \vspace{0.5 cm}
 Logical structure: \tabto{3 cm}{\ttfamily\textcolor{black}{[\textcolor{red}{[}\textcolor{darkblue}{0, 1, 2}], \textcolor{red}{[}], \textcolor{red}{[}\textcolor{darkblue}{3, 4}], \textcolor{red}{[}\textcolor{darkblue}{5, 6, 7, 8, 9}]\textcolor{red}{]}}}
 
-\vspace{0.15 cm}
+\vspace{0.05 cm}
 Offsets:           \tabto{3 cm}{\ttfamily\verb|[|\textcolor{red}{0,}\verb|         |\textcolor{red}{3,}\verb|  |\textcolor{red}{3,}\verb|      |\textcolor{red}{5,}\verb|             |\textcolor{red}{10}\verb|]|}
 
-\vspace{0.15 cm}
+\vspace{0.05 cm}
 Content:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkblue}{0, 1, 2}\verb|,       |\textcolor{darkblue}{3, 4}\verb|,   |\textcolor{darkblue}{5, 6, 7, 8, 9}\verb|]|}
 
-\vspace{0.15 cm}
-Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}\verb|        |\textcolor{purple}{1, 1,}\verb|   |\textcolor{darkorange}{2, 2, 2, 2, 2}|\verb|]|}
+\vspace{0.05 cm}
+Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}\verb|        |\textcolor{purple}{2, 2,}\verb|   |\textcolor{darkorange}{3, 3, 3, 3, 3}|\verb|]|}
+
+\vspace{0.5 cm}
+A ``jagged array'' (content $+$ offsets or content $+$ parents) is a basic building block of variable-sized, nested structure.
 
 
 
