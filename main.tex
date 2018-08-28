@@ -240,7 +240,7 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 \end{minted}
 \end{frame}
 
-\begin{frame}[fragile]{Jagged cross-join has an array programming solution (Jaydeep)}
+\begin{frame}[fragile]{Jagged cross-join has a fully vectorizable solution (Jaydeep)}
 \small
 \vspace{0.2 cm}
 
@@ -255,13 +255,14 @@ def cross(self, other):
     parents = offsets2parents(offsets)
     indexes = numpy.arange(offsets[-1], dtype=int)
 
-    opi = offsets[parents[indexes]]
-    ocpi = other.counts[parents[indexes]]
+    # fancy indexing get -> SIMD gather
+    pi = parents[indexes]
+    opi = offsets[pi]
+    ocpi = other.counts[pi]
 
-    left = self.offsets[parents[indexes]][:-1] + (
-               (indexes - opi) // ocpi)
-    right = other.offsets[parents[indexes]][:-1] + (
-               indexes - opi) - ocpi * ((indexes - opi) // ocpi)
+    left = self.offsets[pi][:-1] + ((indexes - opi) // ocpi)
+    right = other.offsets[pi][:-1] + (indexes - opi) - (
+                                       ocpi * ((indexes - opi) // ocpi))
 
     return JaggedArray.fromoffsets(offsets, Table(left, right))
 \end{minted}
@@ -303,6 +304,9 @@ nonempty_best = events["best"][events["best"].counts > 0, 0]
 \end{minted}
 \end{uncoverenv}
 \end{frame}
+
+
+
 
 
 
