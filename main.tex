@@ -305,9 +305,14 @@ nonempty_best = events["best"][events["best"].counts > 0, 0]
 \end{uncoverenv}
 \end{frame}
 
+\begin{frame}{Surprisingly, jagged reducers are fully vectorizable, too (Jaydeep)}
+\only<1>{\includegraphics[width=0.75\linewidth]{hillis-steele.pdf}}
+\only<2>{\includegraphics[width=0.75\linewidth]{hillis-steele-2.pdf}}
+\only<3>{\includegraphics[width=0.75\linewidth]{hillis-steele-3.pdf}}
 
-
-
+\only<1>{\vspace{-3 cm} This is known as the Hillis-Steele algorithm: creates a cumulative sum in parallel. \vspace{3 cm}}
+\only<3>{\vspace{-1.5 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event (by checking parents) and then take the last (cumulative) value in each event. \vspace{1.5 cm}}
+\end{frame}
 
 
 \end{document}
