@@ -150,11 +150,16 @@ Content:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkblue}{0, 1, 2}\
 Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}\verb|        |\textcolor{purple}{2, 2,}\verb|   |\textcolor{darkorange}{3, 3, 3, 3, 3}|\verb|]|}
 
 \vspace{0.5 cm}
-A ``jagged array'' (content $+$ offsets or content $+$ parents) is a basic building block of variable-sized, nested structure.
+\uncover<2->{A ``jagged array'' (content $+$ offsets and/or content $+$ parents) is a basic building block of variable-sized, nested structure.}
 
+\begin{itemize}
+\item<3-> use a jagged array as the content of another jagged array to get {\tt\small list<list<X>>}
+\item<4-> use a fixed-size rectangular array of dimension {\tt\small N} as content to get {\tt\small list<X[N]>}
+\item<5-> use a fixed-size rectangular array of dimension {\tt\small M} as offsets to get {\tt\small list<X>[M]}
+\end{itemize}
 
-
-
+\vspace{0.25 cm}
+\uncover<6->{When combined with a table type (column names $\to$ arrays), this is as expressive as any combination of {\tt\small std::vector} and {\tt\small struct} (i.e.\ as expressive as ProtoBuf).}
 \end{frame}
 
 
