@@ -167,7 +167,9 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 \end{frame}
 
 \begin{frame}{Array programming can be extended to jagged arrays}
-\vspace{0.2 cm}
+\vspace{0.1 cm}
+\begin{columns}
+\column{1.05\linewidth}
 \begin{itemize}\setlength{\itemsep}{0.15 cm}
 \item Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][:, 0]}} $\to$ first jet per event
 \item<2-> Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{jetpt * sinh(jeteta)}} $\to$ \mbox{keep jagged structure\hspace{-1 cm}}
@@ -183,7 +185,7 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 
 \tabto{5.5 cm}{\small \mintinline{python}{jeteta[a]}} $\to$ \mbox{\small \mintinline{python}{[[3.6], [], [-1.2], [0.4]]}\hspace{-0.5 cm}}
 
-\item<6-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{events["jets"]["pt"][7, 1]}} (all identical)
+\item<6-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{events["jets"]["pt"][7, 1]}} \mbox{(all the same)\hspace{-0.5 cm}}
 
 (project jagged tables to \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7]["pt"][1]}}
 
@@ -195,6 +197,7 @@ jagged arrays before indexing): \tabto{5.5 cm}{\small \mintinline{python}{events
 
 \item<7-> Jagged array reduction: \tabto{5.5 cm}{\small \mintinline{python}{jetpt.max()}} $\to$ array of max jet $p_T$ per event
 \end{itemize}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Solving physics problems with jagged array programming}
@@ -302,7 +305,7 @@ events["best"] = events["leptoquarks"][argbest]
 \vspace{0.05 cm}
 \begin{uncoverenv}<2->
 \begin{minted}{python}
-nonempty_best = events["best"][events["best"].counts > 0, 0]
+nonempty_best = events["best"][(events["best"].counts > 0), 0]
 \end{minted}
 \end{uncoverenv}
 \end{frame}
@@ -328,6 +331,15 @@ nonempty_best = events["best"][events["best"].counts > 0, 0]
 
 \vspace{0.15 cm}
 \textcolor{gray}{\small (TODO: replicate Jaydeep's results, write pure C code (no Numpy), and try to auto-vectorize the new algorithm in CPU.)}
+\end{frame}
+
+\begin{frame}{Relevance to ROOT}
+\vspace{0.5 cm}
+
+
+
+
+
 \end{frame}
 
 
