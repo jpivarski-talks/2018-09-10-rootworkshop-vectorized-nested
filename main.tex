@@ -307,7 +307,7 @@ events["best"] = events["leptoquarks"][argbest]
 \vspace{0.05 cm}
 \begin{uncoverenv}<2->
 \begin{minted}{python}
-# drop empty lists and concatenate by ignoring offsets
+# remove empty lists and concatenate singletons by dropping offsets
 nonempty_best = events["best"].flatten()
 \end{minted}
 \end{uncoverenv}
@@ -347,9 +347,10 @@ nonempty_best = events["best"].flatten()
 \vspace{0.5 cm}
 \begin{itemize}
 \item<3-> The jagged array structure aligns perfectly with the RForest concept.
-\item<4-> An array programming model could be supported by the RTensor project.
+\item<4-> An array programming model could be supported by RTensor.
 \item<5-> VecOps::RVec provides one-in-one-out vectorization; it could be extended to provide vectorized jagged operations as well.
-\item<6-> Doing so would provide a ``C++ story'' for how physicists can use BulkIO.
+\item<6-> It could fit into RDataFrame if applied to clusters (``map partitions'').
+\item<7-> Doing so would provide a ``C++ story'' for how physicists can use BulkIO.
 \end{itemize}
 \end{frame}
 
