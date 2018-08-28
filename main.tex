@@ -130,9 +130,9 @@ Expresses regular operations over \\ rectangular data structures in shorthand.
 \item<4-> Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{all_phi - 2*pi}}
 \item<5-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger & (pt > 40)]}}
 \item<6-> Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{all_eta[argmax(all_pt)]}}
-\item<7-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][row]} (row of column array)}
+\item<7-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][7]} (row 7 of column array)}
 
-(AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[row]["column"]} (field of row tuple)}
+(AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[7]["column"]} (field of row tuple 7)}
 \end{itemize}
 \end{frame}
 
@@ -160,6 +160,29 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 
 \vspace{0.25 cm}
 \uncover<6->{When combined with a table type (column names $\to$ arrays), this is as expressive as any combination of {\tt\small std::vector} and {\tt\small struct} (i.e.\ as expressive as ProtoBuf).}
+\end{frame}
+
+\begin{frame}{Array programming can be extended to jagged arrays}
+\vspace{0.5 cm}
+\begin{itemize}
+\item Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][:, 0]}} $\to$ first jet per event
+\item Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{jetpt * sinh(jeteta)}} $\to$ keep structure
+\item Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{jetphi - metphi}} $\to$ expand {\small \mintinline{python}{metphi}} from
+
+\tabto{5.5 cm}one-per-event to one-per-jet (solves problem 1)
+
+\item Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger]}} $\to$ drop events
+
+\tabto{5.5 cm}{\small \mintinline{python}{data[jetpt > 40]}} $\to$ drop jets from events
+
+\item Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{a = argmax(jetpt)}} $\to$ \mbox{\small \mintinline{python}{[[2], [], [1], [4]]}\hspace{-0.5 cm}}
+
+\tabto{5.5 cm}{\small \mintinline{python}{jeteta[a]}} $\to$ \mbox{\small \mintinline{python}{[[3.6], [], [-1.2], [0.4]]}\hspace{-0.5 cm}}
+
+
+
+
+\end{itemize}
 \end{frame}
 
 
