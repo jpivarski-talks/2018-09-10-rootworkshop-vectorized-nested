@@ -250,22 +250,20 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 \column{1.05\linewidth}
 \begin{minted}{python}
 def cross(self, other):
-    indexes = numpy.arange(offsets[-1], dtype=int)
+    offsets = counts2offsets(self.counts * other.counts)
     parents = offsets2parents(offsets)
 
-    left = numpy.empty_like(indexes)
-    right = numpy.empty_like(indexes)
-
-    left[indexes] = self.offsets[parents[indexes]][:-1] + (
-        (indexes - offsets[parents[indexes]]) //
+    left = self.offsets[parents[indexes]][:-1] +             \
+        ((indexes - offsets[parents[indexes]]) //            \
             other.counts[parents[indexes]])
-    right[indexes] = other.offsets[parents[indexes]][:-1] + \
-        (indexes - offsets[parents[indexes]]) - \
-            other.counts[parents[indexes]] * (
-                (indexes - offsets[parents[indexes]]) //
+
+    right = other.offsets[parents[indexes]][:-1] +           \
+        (indexes - offsets[parents[indexes]]) -              \
+            other.counts[parents[indexes]] *                 \
+                ((indexes - offsets[parents[indexes]]) //    \
                     other.counts[parents[indexes]])
 
-    return Jagged.fromoffsets(offsets, Table(offsets[-1], left, right))
+    return JaggedArray.fromoffsets(offsets, Table(left, right))
 \end{minted}
 \end{columns}
 \end{frame}
