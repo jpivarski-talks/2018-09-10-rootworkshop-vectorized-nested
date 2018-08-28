@@ -34,8 +34,8 @@
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
 \title[2018-09-10-rootworkshop-vectorized-nested]{Vectorized Processing of Nested Data}
-\author{Jim Pivarski}
-\institute{Princeton University -- DIANA-HEP}
+\author[shortname]{\textcolor{darkblue}{Jim Pivarski}\inst{a} \and Jaydeep Nandi\inst{b} \and David Lange\inst{a}}
+\institute[shortinst]{\inst{a} Princeton University \and \inst{b} National Institute of Technology, Silchar, India}
 \date{September 10, 2018}
 
 \usetikzlibrary{shapes.callouts}
@@ -86,19 +86,20 @@ for event in dataset:
 \end{minted}
 \normalsize
 
-\vspace{0.3 cm}
-\item<2-> Compute mass of all particles from two collections.
+\vspace{0.2 cm}
+\item<2-> Compute mass of all particles from two collections, subjet to a cut.
 \small
 \begin{minted}{python}
 for event in dataset:
     event.leptoquarks = []
     for jet in event.jets:
         for lepton in event.leptons:
-            event.pairs.append(mass(jet, lepton))
+            if cut(jet, lepton):
+                event.pairs.append(mass(jet, lepton))
 \end{minted}
 \normalsize
 
-\vspace{0.3 cm}
+\vspace{0.2 cm}
 \item<3-> Find the ``best'' candidate per event or per subcollection.
 \small
 \begin{minted}{python}
@@ -179,11 +180,11 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 
 \tabto{5.5 cm}{\small \mintinline{python}{jeteta[a]}} $\to$ \mbox{\small \mintinline{python}{[[3.6], [], [-1.2], [0.4]]}\hspace{-0.5 cm}}
 
-\item<6-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{events["jets"]["pt"][7, 1]}}
+\item<6-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{events["jets"]["pt"][7, 1]}} (all identical)
 
-(AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7]["pt"][1]}}
+(project jagged tables to \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7]["pt"][1]}}
 
-\tabto{5.5 cm}{\small \mintinline{python}{events[7]["jets"]["pt"][1]}}
+jagged arrays before indexing): \tabto{5.5 cm}{\small \mintinline{python}{events[7]["jets"]["pt"][1]}}
 
 \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7, 1]["pt"]}}
 
@@ -192,6 +193,9 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 \item<7-> Jagged array reduction: \tabto{5.5 cm}{\small \mintinline{python}{jetpt.max()}} $\to$ array of max jet $p_T$ per event
 \end{itemize}
 \end{frame}
+
+
+
 
 
 \end{document}
