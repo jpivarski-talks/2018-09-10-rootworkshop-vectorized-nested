@@ -194,7 +194,92 @@ jagged arrays before indexing): \tabto{5.5 cm}{\small \mintinline{python}{events
 \end{itemize}
 \end{frame}
 
+\begin{frame}[fragile]{Solving physics problems with jagged array programming}
+\vspace{0.5 cm}
+{\bf Problem 1:} Compute the $\phi$ difference between each jet and its event's MET.
+\small
+\begin{minted}{python}
+for event in dataset:
+    for jet in event.jets:
+        jet.phidiff = jet.phi - event.phi
+\end{minted}
+\normalsize
 
+\vspace{0.5 cm}
+{\bf Jagged array solution:} 
+\small
+\begin{minted}{python}
+events["jets"]["phidiff"] = \
+    events["jets"]["phi"] - events["MET"]["phi"]
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Solving physics problems with jagged array programming}
+\vspace{0.5 cm}
+{\bf Problem 2:} Compute mass of all particles from two collections, subjet to a cut.
+\small
+\begin{minted}{python}
+for event in dataset:
+    event.leptoquarks = []
+    for jet in event.jets:
+        for lepton in event.leptons:
+            if cut(jet, lepton):
+                event.pairs.append(mass(jet, lepton))
+\end{minted}
+\normalsize
+
+\vspace{0.5 cm}
+{\bf Jagged array solution:} 
+\small
+\begin{minted}{python}
+# jagged cross-join makes (jet, lepton) pairs per event
+pairs = events["jets"].cross(events["leptons"])
+
+events["leptoquarks"] = mass(pairs[cut(pairs)])
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Jagged cross-join has an array programming solution (Jaydeep)}
+\small
+\vspace{0.2 cm}
+
+\hfill \mbox{\includegraphics[height=2.5 cm]{jaydeep.jpg}\hspace{-0.75 cm}}
+
+\vspace{-2.5 cm}
+\begin{minted}{python}
+def cross(self, other):
+    indexes = numpy.arange(offsets[-1], dtype=int)
+    parents = offsets2parents(offsets)
+
+    left = numpy.empty_like(indexes)
+    right = numpy.empty_like(indexes)
+
+    left[indexes] = self.offsets[parents[indexes]][:-1] + (
+        (indexes - offsets[parents[indexes]]) //
+            other.counts[parents[indexes]])
+    right[indexes] = other.offsets[parents[indexes]][:-1] + \
+        (indexes - offsets[parents[indexes]]) - \
+            other.counts[parents[indexes]] * (
+                (indexes - offsets[parents[indexes]]) //
+                    other.counts[parents[indexes]])
+
+    return self.fromoffsets(offsets, Table(offsets[-1], left, right))
+\end{minted}
+\end{frame}
+
+\begin{frame}[fragile]{Solving physics problems with jagged array programming}
+\vspace{0.5 cm}
+{\bf Problem 3:} Find the ``best'' candidate per event or per subcollection.
+\small
+\begin{minted}{python}
+for event in dataset:
+    event.best = None
+    for leptoquark in leptoquarks:
+        if event.best is None or better(leptoquark, event.best):
+            event.best = leptoquark
+\end{minted}
+\normalsize
+\end{frame}
 
 
 
