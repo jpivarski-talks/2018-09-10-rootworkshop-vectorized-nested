@@ -132,10 +132,10 @@ Expresses regular operations over \\ rectangular data structures in shorthand.
 \item<3-> Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{all_pz = all_pt * sinh(all_eta)}}
 \item<4-> Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{all_phi - 2*pi}}
 \item<5-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger & (pt > 40)]}}
-\item<6-> Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{all_eta[argmax(all_pt)]}}
+\item<6-> Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{all_eta[argsort(all_pt)]}}
 \item<7-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][7]} (row 7 of column array)}
 
-(AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[7]["column"]} (field of row tuple 7)}
+(hides AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[7]["column"]} (field of row tuple 7)}
 \item<8-> Array reduction: \tabto{5.5 cm}{\small \mintinline{python}{array.sum()}} $\to$ scalar
 \end{itemize}
 \end{frame}
@@ -177,7 +177,7 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 
 \tabto{5.5 cm}one-per-event to one-per-jet before operation
 
-\item<4-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger]}} $\to$ drop events
+\item<4-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger]}} $\to$ drop whole events
 
 \tabto{5.5 cm}{\small \mintinline{python}{data[jetpt > 40]}} $\to$ drop jets from events
 
@@ -215,6 +215,7 @@ for event in dataset:
 {\bf Jagged array solution:} 
 \small
 \begin{minted}{python}
+# because of extended broadcasting rules
 events["jets"]["phidiff"] = \
     events["jets"]["phi"] - events["MET"]["phi"]
 \end{minted}
@@ -245,7 +246,7 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 \end{minted}
 \end{frame}
 
-\begin{frame}[fragile]{Jagged cross-join has a fully vectorizable solution (Jaydeep)}
+\begin{frame}[fragile]{Jagged cross-join has a fully vectorizable implementation (Jaydeep)}
 \small
 \vspace{0.2 cm}
 
@@ -279,7 +280,7 @@ def cross(self, other):
 \end{frame}
 
 \begin{frame}[fragile]{Solving physics problems with jagged array programming}
-\vspace{0.5 cm}
+\vspace{0.25 cm}
 {\bf Problem 3:} Find the ``best'' candidate per event or per subcollection.
 \small
 \begin{minted}{python}
@@ -299,13 +300,15 @@ for event in dataset:
 # jagged argmax makes empty lists [] or singleton lists [N]
 argbest = quality(events["leptoquarks"]).argmax()
 
+# jagged fancy indexing transforms [] -> [] and [i] -> [sublist[i]]
 events["best"] = events["leptoquarks"][argbest]
 \end{minted}
 
 \vspace{0.05 cm}
 \begin{uncoverenv}<2->
 \begin{minted}{python}
-nonempty_best = events["best"][(events["best"].counts > 0), 0]
+# drop empty lists and concatenate by ignoring offsets
+nonempty_best = events["best"].flatten()
 \end{minted}
 \end{uncoverenv}
 \end{frame}
@@ -316,7 +319,7 @@ nonempty_best = events["best"][(events["best"].counts > 0), 0]
 \only<3>{\includegraphics[width=0.75\linewidth]{hillis-steele-3.pdf}}
 
 \only<1>{\vspace{-3 cm} This is known as the Hillis-Steele algorithm: creates a cumulative sum in parallel. \vspace{3 cm}}
-\only<3>{\vspace{-1.5 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event (by checking parents) and then take the last (cumulative) value in each event. \vspace{1.5 cm}}
+\only<3>{\vspace{-1.5 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event \\ (by checking parents) and then take the last value in each event. \vspace{1.5 cm}}
 \end{frame}
 
 \begin{frame}{Performance of modified Hillis-Steele}
