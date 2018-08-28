@@ -245,7 +245,9 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 
 \hfill \mbox{\includegraphics[height=2.5 cm]{jaydeep.jpg}\hspace{-0.75 cm}}
 
-\vspace{-2.5 cm}
+\vspace{-2.6 cm}
+\begin{columns}
+\column{1.05\linewidth}
 \begin{minted}{python}
 def cross(self, other):
     indexes = numpy.arange(offsets[-1], dtype=int)
@@ -263,8 +265,9 @@ def cross(self, other):
                 (indexes - offsets[parents[indexes]]) //
                     other.counts[parents[indexes]])
 
-    return self.fromoffsets(offsets, Table(offsets[-1], left, right))
+    return Jagged.fromoffsets(offsets, Table(offsets[-1], left, right))
 \end{minted}
+\end{columns}
 \end{frame}
 
 \begin{frame}[fragile]{Solving physics problems with jagged array programming}
