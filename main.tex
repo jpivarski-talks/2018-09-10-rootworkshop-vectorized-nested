@@ -33,6 +33,8 @@
 \definecolor{darkgreen}{rgb}{0,0.6,0}
 \definecolor{mauve}{rgb}{0.58,0,0.82}
 
+\xdefinecolor{lightblue}{rgb}{0,0.25,1.0}
+
 \title[2018-09-10-rootworkshop-vectorized-nested]{Vectorized Processing of Nested Data}
 \author[shortname]{\textcolor{darkblue}{Jim Pivarski}\inst{a} \and Jaydeep Nandi\inst{b} \and David Lange\inst{a}}
 \institute[shortinst]{\inst{a} Princeton University \and \inst{b} National Institute of Technology, Silchar, India}
@@ -312,6 +314,20 @@ nonempty_best = events["best"][events["best"].counts > 0, 0]
 
 \only<1>{\vspace{-3 cm} This is known as the Hillis-Steele algorithm: creates a cumulative sum in parallel. \vspace{3 cm}}
 \only<3>{\vspace{-1.5 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event (by checking parents) and then take the last (cumulative) value in each event. \vspace{1.5 cm}}
+\end{frame}
+
+\begin{frame}{Performance of modified Hillis-Steele}
+\begin{center}
+\includegraphics[width=0.5\linewidth]{jagged_max.png}
+\end{center}
+
+\textcolor{darkorange}{``CPU time''} is {\tt\small numpy.max.reduceat}, which is a for loop (loop-carried dependency), written in C, executed on a single thread on a Xeon E5-2686.
+
+\vspace{0.15 cm}
+\textcolor{lightblue}{``GPU time''} is the new algorithm, written in CUDA, executed on a Tesla K80.
+
+\vspace{0.15 cm}
+\textcolor{gray}{\small (TODO: replicate Jaydeep's results, write pure C code (no Numpy), and try to auto-vectorize the new algorithm in CPU.)}
 \end{frame}
 
 
