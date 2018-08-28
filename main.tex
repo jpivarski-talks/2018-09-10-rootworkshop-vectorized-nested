@@ -75,7 +75,7 @@ Often hard to vectorize or even express with array programming.
 \end{frame}
 
 \begin{frame}[fragile]{Examples of physics problems involving nested data operations}
-\vspace{0.2 cm}
+\vspace{0.3 cm}
 \begin{enumerate}
 \item Compute the $\phi$ difference between each jet and its event's MET.
 \small
@@ -87,15 +87,14 @@ for event in dataset:
 \normalsize
 
 \vspace{0.3 cm}
-\item<2-> Compute mass of all particles from two collections, subject to a cut.
+\item<2-> Compute mass of all particles from two collections.
 \small
 \begin{minted}{python}
 for event in dataset:
     event.leptoquarks = []
     for jet in event.jets:
         for lepton in event.leptons:
-            if cut(jet, lepton):
-                event.pairs.append(mass(jet, lepton))
+            event.pairs.append(mass(jet, lepton))
 \end{minted}
 \normalsize
 
@@ -115,7 +114,7 @@ for event in dataset:
 
 \begin{frame}[fragile]{Array programming}
 \vspace{0.2 cm}
-\hfill \includegraphics[height=3 cm]{apl-timeline.pdf}
+\hfill \includegraphics[height=2.75 cm]{apl-timeline.pdf}
 
 \vspace{-2.15 cm}
 {\bf\large Long history; not just Numpy}
@@ -123,7 +122,7 @@ for event in dataset:
 \vspace{0.5 cm}
 Expresses regular operations over \\ rectangular data structures in shorthand.
 
-\vspace{0.5 cm}
+\vspace{0.25 cm}
 \begin{itemize}\setlength{\itemsep}{0.15 cm}
 \item<2-> Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{rgb_pixels[0, 50:100, ::3]}}
 \item<3-> Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{all_pz = all_pt * sinh(all_eta)}}
@@ -133,6 +132,7 @@ Expresses regular operations over \\ rectangular data structures in shorthand.
 \item<7-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{table["column"][7]} (row 7 of column array)}
 
 (AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{table[7]["column"]} (field of row tuple 7)}
+\item<8-> Array reduction: \tabto{5.5 cm}{\small \mintinline{python}{array.sum()}} $\to$ scalar
 \end{itemize}
 \end{frame}
 
@@ -163,25 +163,33 @@ Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}
 \end{frame}
 
 \begin{frame}{Array programming can be extended to jagged arrays}
-\vspace{0.5 cm}
-\begin{itemize}
+\vspace{0.2 cm}
+\begin{itemize}\setlength{\itemsep}{0.15 cm}
 \item Multidimensional slices: \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][:, 0]}} $\to$ first jet per event
-\item Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{jetpt * sinh(jeteta)}} $\to$ keep structure
-\item Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{jetphi - metphi}} $\to$ expand {\small \mintinline{python}{metphi}} from
+\item<2-> Elementwise operations: \tabto{5.5 cm}{\small \mintinline{python}{jetpt * sinh(jeteta)}} $\to$ \mbox{keep jagged structure\hspace{-1 cm}}
+\item<3-> Broadcasting: \tabto{5.5 cm}{\small \mintinline{python}{jetphi - metphi}} $\to$ expand {\small \mintinline{python}{metphi}} from
 
-\tabto{5.5 cm}one-per-event to one-per-jet (solves problem 1)
+\tabto{5.5 cm}one-per-event to one-per-jet before operation
 
-\item Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger]}} $\to$ drop events
+\item<4-> Masking (list compaction): \tabto{5.5 cm}{\small \mintinline{python}{data[trigger]}} $\to$ drop events
 
 \tabto{5.5 cm}{\small \mintinline{python}{data[jetpt > 40]}} $\to$ drop jets from events
 
-\item Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{a = argmax(jetpt)}} $\to$ \mbox{\small \mintinline{python}{[[2], [], [1], [4]]}\hspace{-0.5 cm}}
+\item<5-> Fancy indexing (gather/scatter): \tabto{5.5 cm}{\small \mintinline{python}{a = argmax(jetpt)}} $\to$ \mbox{\small \mintinline{python}{[[2], [], [1], [4]]}\hspace{-0.5 cm}}
 
 \tabto{5.5 cm}{\small \mintinline{python}{jeteta[a]}} $\to$ \mbox{\small \mintinline{python}{[[3.6], [], [-1.2], [0.4]]}\hspace{-0.5 cm}}
 
+\item<6-> Row/column commutativity \tabto{5.5 cm}{\small \mintinline{python}{events["jets"]["pt"][7, 1]}}
 
+(AoS $\leftrightarrow$ SoA): \tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7]["pt"][1]}}
 
+\tabto{5.5 cm}{\small \mintinline{python}{events[7]["jets"]["pt"][1]}}
 
+\tabto{5.5 cm}{\small \mintinline{python}{events["jets"][7, 1]["pt"]}}
+
+\tabto{5.5 cm}{\small \mintinline{python}{events[7]["jets"][1]["pt"]}}
+
+\item<7-> Jagged array reduction: \tabto{5.5 cm}{\small \mintinline{python}{jetpt.max()}} $\to$ array of max jet $p_T$ per event
 \end{itemize}
 \end{frame}
 
