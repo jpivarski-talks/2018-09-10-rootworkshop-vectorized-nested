@@ -75,7 +75,7 @@ Often hard to vectorize or even express with array programming.
 \end{frame}
 
 \begin{frame}[fragile]{Examples of physics problems involving nested data operations}
-\vspace{0.3 cm}
+\vspace{0.15 cm}
 \begin{enumerate}
 \item Compute the $\phi$ difference between each jet and its event's MET.
 \small
@@ -86,7 +86,7 @@ for event in dataset:
 \end{minted}
 \normalsize
 
-\vspace{0.2 cm}
+\vspace{0.1 cm}
 \item<2-> Compute mass of all particles from two collections, subjet to a cut.
 \small
 \begin{minted}{python}
@@ -99,15 +99,16 @@ for event in dataset:
 \end{minted}
 \normalsize
 
-\vspace{0.2 cm}
+\vspace{0.1 cm}
 \item<3-> Find the ``best'' candidate per event or per subcollection.
 \small
 \begin{minted}{python}
 for event in dataset:
     event.best = None
     for leptoquark in leptoquarks:
-        if event.best is None or better(leptoquark, event.best):
-            event.best = leptoquark
+        if event.best is None or \
+            quality(leptoquark) > quality(event.best):
+                event.best = leptoquark
 \end{minted}
 \normalsize
 \end{enumerate}
@@ -245,27 +246,30 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 
 \hfill \mbox{\includegraphics[height=2.5 cm]{jaydeep.jpg}\hspace{-0.75 cm}}
 
-\vspace{-2.6 cm}
+\vspace{-2.7 cm}
 \begin{columns}
 \column{1.05\linewidth}
 \begin{minted}{python}
 def cross(self, other):
     offsets = counts2offsets(self.counts * other.counts)
     parents = offsets2parents(offsets)
+    indexes = numpy.arange(offsets[-1], dtype=int)
 
-    left = self.offsets[parents[indexes]][:-1] +             \
-        ((indexes - offsets[parents[indexes]]) //            \
-            other.counts[parents[indexes]])
+    opi = offsets[parents[indexes]]
+    ocpi = other.counts[parents[indexes]]
 
-    right = other.offsets[parents[indexes]][:-1] +           \
-        (indexes - offsets[parents[indexes]]) -              \
-            other.counts[parents[indexes]] *                 \
-                ((indexes - offsets[parents[indexes]]) //    \
-                    other.counts[parents[indexes]])
+    left = self.offsets[parents[indexes]][:-1] + (
+               (indexes - opi) // ocpi)
+    right = other.offsets[parents[indexes]][:-1] + (
+               indexes - opi) - ocpi * ((indexes - opi) // ocpi)
 
     return JaggedArray.fromoffsets(offsets, Table(left, right))
 \end{minted}
 \end{columns}
+
+\normalsize
+\vspace{0.5 cm}
+(There's also a solution for non-repeating pairs of a collection with itself.)
 \end{frame}
 
 \begin{frame}[fragile]{Solving physics problems with jagged array programming}
@@ -274,12 +278,30 @@ def cross(self, other):
 \small
 \begin{minted}{python}
 for event in dataset:
-    event.best = None
+    event.best = []
     for leptoquark in leptoquarks:
-        if event.best is None or better(leptoquark, event.best):
-            event.best = leptoquark
+        if event.best == [] or \
+            quality(leptoquark) > quality(event.best[0]):
+                event.best = [leptoquark]
 \end{minted}
 \normalsize
+
+\vspace{0.5 cm}
+{\bf Jagged array solution:} 
+\small
+\begin{minted}{python}
+# jagged argmax makes empty lists [] or singleton lists [N]
+argbest = quality(events["leptoquarks"]).argmax()
+
+events["best"] = events["leptoquarks"][argbest]
+\end{minted}
+
+\vspace{0.05 cm}
+\begin{uncoverenv}<2->
+\begin{minted}{python}
+nonempty_best = events["best"][events["best"].counts > 0, 0]
+\end{minted}
+\end{uncoverenv}
 \end{frame}
 
 
