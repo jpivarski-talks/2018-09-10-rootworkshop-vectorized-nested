@@ -336,7 +336,7 @@ nonempty_best = events["best"].flatten()
 \textcolor{gray}{\small (TODO: replicate Jaydeep's results, write pure C code (no Numpy), and try to auto-vectorize the new algorithm in CPU.)}
 \end{frame}
 
-\begin{frame}{Relevance to ROOT (my conclusions slide)}
+\begin{frame}{Relevance to ROOT}
 \large
 \vspace{0.5 cm}
 \textcolor{darkblue}{\Large None of the preceeding needs to be in Python or Numpy.}
@@ -352,6 +352,34 @@ nonempty_best = events["best"].flatten()
 \item<6-> It could fit into RDataFrame if applied to clusters (``map partitions'').
 \item<7-> Doing so would provide a ``C++ story'' for how physicists can use BulkIO.
 \end{itemize}
+\end{frame}
+
+\begin{frame}{Where to find implementations and example code}
+\vspace{0.3 cm}
+\begin{columns}
+\column{1.1\linewidth}
+\begin{itemize}\setlength{\itemsep}{0.5 cm}
+\item awkward-array: \textcolor{blue}{\normalsize\url{https://github.com/scikit-hep/awkward-array}}
+
+\vspace{0.25 cm}
+Implementations of jagged arrays and tables in pure Numpy. Vectorized accelerators will appear as {\tt\normalsize awkward-array-cpu} and {\tt\normalsize awkward-array-gpu}.
+
+\item Jaydeep's report on vectorized algorithms for cross (``combinations''), pairs, jagged reduction (``global argmin''):
+
+\vspace{0.25 cm}
+\textcolor{blue}{\normalsize\url{https://gitlab.com/Jayd_1234/GSoC_vectorized_proof_of_concepts}}
+
+\vspace{0.25 cm}
+Algorithms are demonstrated in Jupyter notebooks; final writeup is in Markdown.
+
+Earlier work:
+
+\vspace{0.25 cm}
+\textcolor{blue}{\normalsize\url{https://github.com/Jayd-1234/GSoC_vectorized_proof_of_concepts}}
+
+\item awkward-array is now used heavily by \href{https://github.com/scikit-hep/uproot}{\textcolor{blue}{uproot}} and \href{https://github.com/scikit-hep/uproot-methods}{\textcolor{blue}{uproot-methods}}. Examples include array programming with TLorentzVectors and jagged arrays of TLorentzVectors.
+\end{itemize}
+\end{columns}
 \end{frame}
 
 \end{document}
