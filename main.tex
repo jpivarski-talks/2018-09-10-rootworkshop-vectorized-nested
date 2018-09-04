@@ -323,17 +323,23 @@ nonempty_best = events["best"].flatten()
 \end{frame}
 
 \begin{frame}{Performance of modified Hillis-Steele}
-\begin{center}
-\includegraphics[width=0.5\linewidth]{jagged_max.png}
-\end{center}
+\large
+\vspace{0.5 cm}
+\begin{columns}
+\column{0.5\linewidth}
+\mbox{ } \hfill Sum of items in groups \hfill \mbox{ }
 
-\textcolor{darkorange}{``CPU time''} is {\tt\small numpy.max.reduceat}, which is a for loop (loop-carried dependency), written in C, executed on a single thread on a Xeon E5-2686.
+\includegraphics[width=\linewidth]{sum_rates_logy.pdf}
 
-\vspace{0.15 cm}
-\textcolor{lightblue}{``GPU time''} is the new algorithm, written in CUDA, executed on a Tesla K80.
+\column{0.5\linewidth}
+\mbox{ } \hfill Max of items in groups \hfill \mbox{ }
 
-\vspace{0.15 cm}
-\textcolor{gray}{\small (TODO: replicate Jaydeep's results, write pure C code (no Numpy), and try to auto-vectorize the new algorithm in CPU.)}
+\includegraphics[width=\linewidth]{max_rates_logy.pdf}
+\end{columns}
+
+\vspace{0.75 cm}
+\normalsize
+\textcolor{gray}{cmslpcgpu3.fnal.gov (Xeon Silver 4110 CPU, Tesla P100 GPU)}
 \end{frame}
 
 \begin{frame}{Relevance to ROOT}
