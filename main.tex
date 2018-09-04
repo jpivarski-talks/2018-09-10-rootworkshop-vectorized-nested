@@ -151,7 +151,7 @@ Offsets:           \tabto{3 cm}{\ttfamily\verb|[|\textcolor{red}{0,}\verb|      
 Content:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkblue}{0, 1, 2}\verb|,       |\textcolor{darkblue}{3, 4}\verb|,   |\textcolor{darkblue}{5, 6, 7, 8, 9}\verb|]|}
 
 \vspace{0.05 cm}
-Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}\verb|        |\textcolor{purple}{2, 2,}\verb|   |\textcolor{darkorange}{3, 3, 3, 3, 3}|\verb|]|}
+Parents:           \tabto{3 cm}{\ttfamily\verb|[ |\textcolor{darkgreen}{0, 0, 0}\verb|        |\textcolor{purple}{2, 2,}\verb|   |\textcolor{darkorange}{3, 3, 3, 3, 3}\verb|]|}
 
 \vspace{0.5 cm}
 \uncover<2->{A ``jagged array'' (content $+$ offsets and/or content $+$ parents) is a basic building block of variable-sized, nested structure.}
@@ -257,18 +257,18 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 \column{1.05\linewidth}
 \begin{minted}{python}
 def cross(self, other):
+
     offsets = counts2offsets(self.counts * other.counts)
     parents = offsets2parents(offsets)
     indexes = numpy.arange(offsets[-1], dtype=int)
 
     # fancy indexing get -> SIMD gather
-    pi = parents[indexes]
-    opi = offsets[pi]
-    ocpi = other.counts[pi]
+    ocp = other.counts[parents]
+    iop = indexes - offsets[parents]
+    iop_ocp = iop // ocp
 
-    left = self.offsets[pi][:-1] + ((indexes - opi) // ocpi)
-    right = other.offsets[pi][:-1] + (indexes - opi) - (
-                                       ocpi * ((indexes - opi) // ocpi))
+    left = self.content[self.starts[parents] + iop_ocp]
+    right = other.content[other.starts[parents] + iop - ocp * iop_ocp]
 
     return JaggedArray.fromoffsets(offsets, Table(left, right))
 \end{minted}
