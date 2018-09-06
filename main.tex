@@ -216,8 +216,8 @@ for event in dataset:
 \small
 \begin{minted}{python}
 # because of extended broadcasting rules
-events["jets"]["phidiff"] = \
-    events["jets"]["phi"] - events["MET"]["phi"]
+events["jets"]["phidiff"] = (
+                        events["jets"]["phi"] - events["MET"]["phi"])
 \end{minted}
 \end{frame}
 
@@ -257,7 +257,6 @@ events["leptoquarks"] = mass(pairs[cut(pairs)])
 \column{1.05\linewidth}
 \begin{minted}{python}
 def cross(self, other):
-
     offsets = counts2offsets(self.counts * other.counts)
     parents = offsets2parents(offsets)
     indexes = numpy.arange(offsets[-1], dtype=int)
@@ -343,6 +342,14 @@ nonempty_best = events["best"].flatten()
 
 \vspace{0.25 cm}
 \textcolor{blue}{\small\url{https://github.com/jpivarski/jupyter-performance-studies/blob/master/2018-09-10-jagged-reduction.ipynb}}
+\end{frame}
+
+\begin{frame}{Working examples in uproot 3: try it out!}
+\vspace{0.25 cm}
+\textcolor{blue}{\small\url{https://mybinder.org/v2/gh/scikit-hep/uproot/master?filepath=binder\%2Fversion-3-features.ipynb}}
+
+\vspace{0.15 cm}
+\includegraphics[width=\linewidth]{tutorial-screenshot.png}
 \end{frame}
 
 \begin{frame}{Relevance to ROOT}
