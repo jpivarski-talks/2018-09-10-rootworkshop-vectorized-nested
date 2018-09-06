@@ -84,7 +84,7 @@ Often hard to vectorize or even express with array programming.
 \begin{minted}{python}
 for event in dataset:
     for jet in event.jets:
-        jet.phidiff = jet.phi - event.phi
+        jet.phidiff = jet.phi - event.phi   # N(jets) != N(events)
 \end{minted}
 \normalsize
 
@@ -121,10 +121,10 @@ for event in dataset:
 \hfill \includegraphics[height=2.75 cm]{apl-timeline.pdf}
 
 \vspace{-2.15 cm}
-{\bf\large Long history; not just Numpy}
+{\bf\large Primarily for data analysis languages}
 
 \vspace{0.5 cm}
-Expresses regular operations over \\ rectangular data structures in shorthand.
+Express regular operations over rectangular \\ data structures in shorthand.
 
 \vspace{0.25 cm}
 \begin{itemize}\setlength{\itemsep}{0.15 cm}
@@ -313,12 +313,10 @@ nonempty_best = events["best"].flatten()
 \end{frame}
 
 \begin{frame}{Surprisingly, jagged reducers are fully vectorizable, too (Jaydeep)}
-\only<1>{\includegraphics[width=0.75\linewidth]{hillis-steele.pdf}}
-\only<2>{\includegraphics[width=0.75\linewidth]{hillis-steele-2.pdf}}
-\only<3>{\includegraphics[width=0.75\linewidth]{hillis-steele-3.pdf}}
+\mbox{ } \hfill \only<1>{\includegraphics[width=0.75\linewidth]{hillis-steele.pdf}}\only<2>{\includegraphics[width=0.75\linewidth]{hillis-steele-2.pdf}}\only<3>{\includegraphics[width=0.75\linewidth]{hillis-steele-3.pdf}} \hfill\hfill \mbox{ }
 
 \only<1>{\vspace{-3 cm} This is known as the Hillis-Steele algorithm: creates a cumulative sum in parallel. \vspace{3 cm}}
-\only<3>{\vspace{-1.5 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event \\ (by checking parents) and then take the last value in each event. \vspace{1.5 cm}}
+\only<3>{\vspace{-2 cm} Modification of the Hillis-Steele algorithm: only combine pairs in the same event \\ (by checking parents) and then take the last value in each event. \vspace{2 cm}}
 \end{frame}
 
 \begin{frame}{Performance of modified Hillis-Steele}
@@ -344,7 +342,7 @@ nonempty_best = events["best"].flatten()
 \textcolor{blue}{\small\url{https://github.com/jpivarski/jupyter-performance-studies/blob/master/2018-09-10-jagged-reduction.ipynb}}
 \end{frame}
 
-\begin{frame}{Working examples in uproot 3: try it out!}
+\begin{frame}{Working examples in an interactive notebook: try it out!}
 \vspace{0.25 cm}
 \textcolor{blue}{\small\url{https://mybinder.org/v2/gh/scikit-hep/uproot/master?filepath=binder\%2Fversion-3-features.ipynb}}
 
